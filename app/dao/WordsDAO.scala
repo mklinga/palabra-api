@@ -12,14 +12,14 @@ import play.api.mvc._
 
 import models.Word
 
-class Words @Inject()(@NamedDatabase("default") dbConfigProvider: DatabaseConfigProvider) (tag: Tag) extends Controller {  
+class Words @Inject()(dbConfigProvider: DatabaseConfigProvider) extends Controller {  
 
   private val dbConfig = dbConfigProvider.get[JdbcProfile]
   private val Words = TableQuery[WordsTable]
 
   def all(): Future[Seq[Word]] = dbConfig.db.run(Words.result)
 
-  private class WordsTable (tag: Tag) extends Table[Word](tag, "Words") {  
+  private class WordsTable (tag: Tag) extends Table[Word](tag, "words") {  
 
     def id = column[Int]("id", O.PrimaryKey, O.AutoInc)
     def infinitive = column[String]("infinitive")
