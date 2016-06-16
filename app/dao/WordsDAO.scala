@@ -19,6 +19,11 @@ class Words @Inject()(dbConfigProvider: DatabaseConfigProvider) extends Controll
 
   def all(): Future[Seq[Word]] = dbConfig.db.run(Words.result)
 
+  def find(id: Int): Future[Word] = {
+    val word = for ( w <- Words if (w.id === id) ) yield w
+    dbConfig.db.run(word.result.head)
+  }
+
   private class WordsTable (tag: Tag) extends Table[Word](tag, "words") {  
 
     def id = column[Int]("id", O.PrimaryKey, O.AutoInc)

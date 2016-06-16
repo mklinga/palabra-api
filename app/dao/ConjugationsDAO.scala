@@ -20,9 +20,7 @@ class Conjugations @Inject()(dbConfigProvider: DatabaseConfigProvider) extends C
   def all(): Future[Seq[Conjugation]] = dbConfig.db.run(Conjugations.result)
 
   def findByWord(id: Int)(implicit exec: ExecutionContext): Future[Seq[Conjugation]] = {
-    val conj = for {
-      c <- Conjugations if (c.word_id === id)
-    } yield c
+    val conj = for ( c <- Conjugations if (c.word_id === id) ) yield c
     dbConfig.db.run(conj.result)
   }
 

@@ -20,4 +20,21 @@ class WordsController @Inject() (wordsDao: Words, conjugationsDao: Conjugations)
       .map(result => Ok(Json.toJson(result)))
   }
 
+  def getOne (id: Int) = Action.async {
+    val word = wordsDao.find(id)
+    
+    word.flatMap(w => {
+      conjugationsDao
+        .findByWord(w.id.get)
+        .map(cs => Ok(
+          JsObject(
+            Seq(
+              "word" -> Json.toJson(w),
+              "conjugations" -> Json.toJson(cs)
+            )
+          )
+        )
+      )
+    })
+  }
 }
