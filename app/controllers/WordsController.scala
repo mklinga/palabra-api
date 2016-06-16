@@ -16,7 +16,7 @@ class WordsController @Inject() (wordsDao: Words, conjugationsDao: Conjugations)
   def index = Action.async {
     val words = wordsDao.all()
     words
-      .flatMap(ws => conjugationsDao.all())
+      .flatMap(ws => Future.sequence(ws.map(word => conjugationsDao.findByWord(word.id.get))))
       .map(result => Ok(Json.toJson(result)))
   }
 

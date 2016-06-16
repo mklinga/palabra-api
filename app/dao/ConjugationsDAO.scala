@@ -1,7 +1,7 @@
 package dao
 
 import javax.inject.Inject
-import scala.concurrent.Future
+import scala.concurrent.{ExecutionContext, Future}
 
 import slick.driver.JdbcProfile  
 import slick.driver.PostgresDriver.api._  
@@ -18,6 +18,13 @@ class Conjugations @Inject()(dbConfigProvider: DatabaseConfigProvider) extends C
   private val Conjugations = TableQuery[ConjugationsTable]
 
   def all(): Future[Seq[Conjugation]] = dbConfig.db.run(Conjugations.result)
+
+  def findByWord(id: Int)(implicit exec: ExecutionContext): Future[Seq[Conjugation]] = {
+    val conj = for {
+      c <- Conjugations if (c.word_id === id)
+    } yield c
+    dbConfig.db.run(conj.result)
+  }
 
   private class ConjugationsTable (tag: Tag) extends Table[Conjugation](tag, "conjugations") {  
 
