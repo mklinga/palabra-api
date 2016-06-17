@@ -23,17 +23,14 @@ class Conjugations @Inject()(dbConfigProvider: DatabaseConfigProvider) extends C
     val conj = for ( c <- Conjugations if (c.word_id === id) ) yield c
     dbConfig.db.run(conj.result)
   }
+}
 
-  private class ConjugationsTable (tag: Tag) extends Table[Conjugation](tag, "conjugations") {  
+class ConjugationsTable (tag: Tag) extends Table[Conjugation](tag, "conjugations") {  
+  def id = column[Int]("id", O.PrimaryKey, O.AutoInc)
+  def word_id = column[Int]("word_id")
+  def person_conjugation_id = column[Int]("person_conjugation_id")
+  def time_conjugation_id = column[Int]("time_conjugation_id")
+  def value = column[String]("value")
 
-    def id = column[Int]("id", O.PrimaryKey, O.AutoInc)
-    def word_id = column[Int]("word_id")
-    def person_conjugation_id = column[Int]("person_conjugation_id")
-    def time_conjugation_id = column[Int]("time_conjugation_id")
-    def value = column[String]("value")
-
-    def * = (id.?, word_id, person_conjugation_id, time_conjugation_id, value) <> ((Conjugation.apply _).tupled, Conjugation.unapply _)
-
-  }
-
+  def * = (id.?, word_id, person_conjugation_id, time_conjugation_id, value) <> ((Conjugation.apply _).tupled, Conjugation.unapply _)
 }

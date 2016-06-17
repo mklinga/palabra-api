@@ -46,12 +46,8 @@ class WordsController @Inject() (wordsDao: Words, conjugationsDao: Conjugations)
   }
 
   def getOne (id: Int) = Action.async {
-    val word = wordsDao.find(id)
-    
-    word.flatMap(w => {
-      conjugationsDao
-        .findByWord(w.id.get)
-        .map(cs => Ok(appendConjugationsToWord(w, cs)))
-    })
+    wordsDao
+      .findOneWithConjugations(id)
+      .map(w => Ok(appendConjugationsToWord(w._1, w._2)))
   }
 }
