@@ -87,7 +87,7 @@ INSERT INTO Conjugations (word_id, person_conjugation_id, time_conjugation_id, v
 INSERT INTO RelationTypes (id, relation_type) VALUES (1, 'translation');
 INSERT INTO RelationTypes (id, relation_type) VALUES (2, 'synonym');
 
-INSERT INTO WordRelations (id, word_from_id, word_to_id, relation_type_id) VALUES (1, 1, 2, 1);
+INSERT INTO WordRelations (word_from_id, word_to_id, relation_type_id) VALUES (1, 2, 1);
 
 # --- !Downs
 

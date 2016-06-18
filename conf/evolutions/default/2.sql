@@ -50,9 +50,13 @@ INSERT INTO conjugations (word_id, person_conjugation_id, time_conjugation_id, v
 INSERT INTO conjugations (word_id, person_conjugation_id, time_conjugation_id, value) Values(8, 5, 1, 'have');  
 INSERT INTO conjugations (word_id, person_conjugation_id, time_conjugation_id, value) Values(8, 6, 1, 'have');  
 
-INSERT INTO wordrelations (id, word_from_id, word_to_id, relation_type_id) VALUES (1, 1, 2, 1);
-INSERT INTO wordrelations (id, word_from_id, word_to_id, relation_type_id) VALUES (2, 3, 4, 1);
-INSERT INTO wordrelations (id, word_from_id, word_to_id, relation_type_id) VALUES (3, 5, 6, 1);
-INSERT INTO wordrelations (id, word_from_id, word_to_id, relation_type_id) VALUES (4, 7, 8, 1);
+INSERT INTO wordrelations (word_from_id, word_to_id, relation_type_id) VALUES (1, 2, 1);
+INSERT INTO wordrelations (word_from_id, word_to_id, relation_type_id) VALUES (2, 1, 1);
+INSERT INTO wordrelations (word_from_id, word_to_id, relation_type_id) VALUES (3, 4, 1);
+INSERT INTO wordrelations (word_from_id, word_to_id, relation_type_id) VALUES (4, 3, 1);
+INSERT INTO wordrelations (word_from_id, word_to_id, relation_type_id) VALUES (5, 6, 1);
+INSERT INTO wordrelations (word_from_id, word_to_id, relation_type_id) VALUES (6, 5, 1);
+INSERT INTO wordrelations (word_from_id, word_to_id, relation_type_id) VALUES (7, 8, 1);
+INSERT INTO wordrelations (word_from_id, word_to_id, relation_type_id) VALUES (8, 7, 1);
 
 # --- !Downs
