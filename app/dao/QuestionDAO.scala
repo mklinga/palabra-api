@@ -56,8 +56,14 @@ class Questions @Inject()(dbConfigProvider: DatabaseConfigProvider)(implicit exe
       c <- Conjugations if (w.id === c.word_id)
     } yield (w, c)
 
-    val questions: Future[Seq[( Word, Conjugation )]] = dbConfig.db.run(questionQuery.sortBy(x => rand).take(amount).result)
+    val questions: Future[Seq[( Word, Conjugation )]] = dbConfig.db
+      .run(questionQuery
+        .sortBy(x => rand)
+        .take(amount)
+        .result)
 
+    // it would be easier to fetch all the answers on the same query as questions but slick doesn't support this
+    // at the moment (see https://github.com/slick/slick/issues/1316)
     val answers: Future[Seq[( Word, Conjugation )]] = questions.flatMap(qs => {
       Future.sequence(qs.map(q => {
         val answerQuery = for {
@@ -70,7 +76,7 @@ class Questions @Inject()(dbConfigProvider: DatabaseConfigProvider)(implicit exe
           )
         } yield (w2, c2)
 
-        dbConfig.db.run(answerQuery.result.head)
+        dbConfig.db.run(answerQuery.result.head) // There should be only one proper answer for each question (for now)
       }))
     })
 
