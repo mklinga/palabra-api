@@ -22,4 +22,14 @@ class QuestionController @Inject() (questionDao: Questions)(implicit exec: Execu
         "translation" -> WordServices.appendConjugationsToWord(w._2._1, w._2._2)
       ))))
   }
+
+  def getRandomQuestionnaire (amount: Int) = Action.async {
+    questionDao
+      .getRandomQuestionnaire(amount)
+      .map(words => words.map(w => JsObject(Seq(
+        "question" -> JsObject(Seq("word" -> Json.toJson(w._1._1), "conjugation" -> Json.toJson(w._1._2))),
+        "answer" -> JsObject(Seq("word" -> Json.toJson(w._2._1), "conjugation" -> Json.toJson(w._2._2)))
+      ))))
+      .map(words => Ok(Json.toJson(words)))
+  }
 }

@@ -49,4 +49,38 @@ class Questions @Inject()(dbConfigProvider: DatabaseConfigProvider)(implicit exe
     } yield (question, answer)
   }
 
+  def getRandomQuestionnaire (amount: Int): Future[Seq[(((Word, Conjugation), (Word, Conjugation)))]] = {
+    val rand = SimpleFunction.nullary[Double]("random")
+    val questionQuery = for {
+      w <- Words
+      c <- Conjugations if (w.id === c.word_id)
+    } yield (w, c)
+
+    val questions: Future[Seq[( Word, Conjugation )]] = dbConfig.db.run(questionQuery.sortBy(x => rand).take(amount).result)
+
+    val answers: Future[Seq[( Word, Conjugation )]] = questions.flatMap(qs => {
+      Future.sequence(qs.map(q => {
+        val answerQuery = for {
+          wr <- WordRelations if (wr.word_from_id === q._1.id.get)
+          w2 <- Words if (wr.word_to_id === w2.id)
+          c2 <- Conjugations if (
+            (w2.id === c2.word_id) &&
+            (c2.person_conjugation_id === q._2.person_conjugation_id) &&
+            (c2.time_conjugation_id === q._2.time_conjugation_id)
+          )
+        } yield (w2, c2)
+
+        dbConfig.db.run(answerQuery.result.head)
+      }))
+    })
+
+    val sequences = for {
+      qs <- questions
+      as <- answers
+    } yield (qs, as)
+
+    // Map Seq(Seq[(Word, Conjugation)], Seq[(Word, Conjugation)]) into a Seq((Word, Conjugation), (Word, Conjugation))
+    sequences.map(s => for (i <- 0 until (s._1.size)) yield (s._1(i), s._2(i)))
+  }
+
 }
