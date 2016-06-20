@@ -8,6 +8,8 @@ GET     /questions/random/:amount controllers.QuestionController.getRandomQuesti
 
 GET     /timeconjugations         controllers.TimeConjugationController.index
 
+GET     /personconjugations       controllers.PersonConjugationController.index
+
 GET     /words/random/:languageId/:amount controllers.WordsController.getRandom(languageId: Int, amount: Int)
 GET     /words/:id                controllers.WordsController.getOne(id: Int)
 GET     /words                    controllers.WordsController.index
