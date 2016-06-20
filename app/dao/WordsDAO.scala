@@ -36,9 +36,10 @@ class Words @Inject()(dbConfigProvider: DatabaseConfigProvider)(implicit exec: E
 
     val result = dbConfig.db.run(word.result)
 
-    result.map(r =>
-      r.foldLeft((r(0)._1, Seq(r(0)._2))) ((value: Tuple2[Word, Seq[Conjugation]], next: Tuple2[Word, Conjugation]) => {
-      (value._1, value._2 ++ Seq(next._2))
+    result.map(r => 
+      r.foldLeft[(Word, Seq[Conjugation])]((null, null)) ((value: Tuple2[Word, Seq[Conjugation]], next: Tuple2[Word, Conjugation]) => {
+        if (value._1 == null) (next._1, Seq(next._2))
+        else (value._1, value._2 ++ Seq(next._2))
     }))
   }
 
