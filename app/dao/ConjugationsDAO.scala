@@ -11,6 +11,7 @@ import play.api._
 import play.api.mvc._
 
 import models.Conjugation
+import models.TimeConjugation
 
 class Conjugations @Inject()(dbConfigProvider: DatabaseConfigProvider) extends Controller {  
 
