@@ -28,7 +28,7 @@ class Conjugations @Inject()(dbConfigProvider: DatabaseConfigProvider) extends C
   def update (newConjugations: Seq[Conjugation])(implicit exec: ExecutionContext): Future[Seq[Any]] = {
     Future.sequence(
       newConjugations.map(nc => {
-        val q = Conjugations.filter(_.id === nc.id).update(nc)
+        val q = Conjugations.insertOrUpdate(nc)
         dbConfig.db.run(q)
       })
     )
