@@ -53,6 +53,11 @@ class Words @Inject()(dbConfigProvider: DatabaseConfigProvider)(implicit exec: E
     val word = for (w <- Words if w.language_id === languageId) yield w
     dbConfig.db.run(word.sortBy(x => rand).take(amount).result)
   }
+
+  def update (word: Word): Future[Any] = {
+    val updateWord = _findWordById(word.id.get).update(word)
+    dbConfig.db.run(updateWord)
+  }
 }
 
 class WordsTable (tag: Tag) extends Table[Word](tag, "words") {  

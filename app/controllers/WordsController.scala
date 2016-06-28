@@ -34,4 +34,14 @@ class WordsController @Inject() (wordsDao: Words, conjugationsDao: Conjugations)
       .findOneWithConjugations(id)
       .map(w => Ok(WordServices.appendConjugationsToWord(w._1, w._2)))
   }
+
+  def update (id: Int) = Action.async { request =>
+      val wordJson: JsValue = request.body.asJson.get
+      val newWord: Word = (wordJson \ "value").as[Word]
+      val conjugations: Seq[Conjugation] = (wordJson \ "conjugations").as[Seq[Conjugation]]
+      Future.sequence(Seq(
+        wordsDao.update(newWord),
+        conjugationsDao.update(conjugations)
+      )).map(_ => Ok(wordJson))
+  }
 }

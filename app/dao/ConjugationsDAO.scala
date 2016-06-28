@@ -24,6 +24,16 @@ class Conjugations @Inject()(dbConfigProvider: DatabaseConfigProvider) extends C
     val conj = for ( c <- Conjugations if (c.word_id === id) ) yield c
     dbConfig.db.run(conj.result)
   }
+
+  def update (newConjugations: Seq[Conjugation])(implicit exec: ExecutionContext): Future[Seq[Any]] = {
+    Future.sequence(
+      newConjugations.map(nc => {
+        val q = Conjugations.filter(_.id === nc.id).update(nc)
+        dbConfig.db.run(q)
+      })
+    )
+    
+  }
 }
 
 class ConjugationsTable (tag: Tag) extends Table[Conjugation](tag, "conjugations") {  

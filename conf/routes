@@ -14,5 +14,9 @@ GET     /words/random/:languageId/:amount controllers.WordsController.getRandom(
 GET     /words/:id                controllers.WordsController.getOne(id: Int)
 GET     /words                    controllers.WordsController.index
 
+PUT     /words/:id                controllers.WordsController.update(id: Int)
+
 # Map static resources from the /public folder to the /assets URL path
 GET     /assets/*file             controllers.Assets.versioned(path="/public", file: Asset)
+
+OPTIONS /*url                     controllers.Application.options(url: String)

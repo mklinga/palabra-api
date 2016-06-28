@@ -12,7 +12,10 @@ class CorsFilter @Inject()(
 
   override def apply(nextFilter: RequestHeader => Future[Result]) (requestHeader: RequestHeader): Future[Result] = {
     nextFilter(requestHeader).map { result =>
-      result.withHeaders("Access-Control-Allow-Origin" -> "*")
+      result.withHeaders(
+        "Access-Control-Allow-Origin" -> "*",
+        "Access-Control-Allow-Methods" -> "POST, GET, PUT, DELETE, OPTIONS",
+        "Access-Control-Allow-Headers" -> "origin, x-requested-with, content-type")
     }
   }
 
